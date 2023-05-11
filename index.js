@@ -13,3 +13,6 @@ const movies = [
 app.get("/api/movies/", (req, res) => {
     res.send(movies)
 })
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log("Lisiting on " + port + "..."))
