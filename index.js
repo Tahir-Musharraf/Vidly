@@ -20,11 +20,17 @@ app.get("/", (req, res) => {
 app.get("/api/movies/", (req, res) => {
     res.send(movies)
 })
-// GET single movie
+// GET single movie:Genre
 app.get("/api/movies/:genre", (req, res) => {
     const movie = movies.filter(movie => movie.genres.includes(req.params.genre))
-    console.log(movie)
     if (!movie) return res.status(404).send("The required genre not found!")
+
+    res.send(movie)
+})
+// GET single movie:rating
+app.get("/api/movies/rating/:rating", (req, res) => {
+    const movie = movies.find(movie => movie.rating === parseFloat(req.params.rating) )
+    if (!movie) return res.status(404).send("The required ratting movie not found!")
 
     res.send(movie)
 })
