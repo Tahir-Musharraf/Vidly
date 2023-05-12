@@ -4,12 +4,12 @@ const app = express();
 // app.use(express.json());
 
 const movies = [
-    { id: 1, name: 'Jhon Wick', genres: 'Action'},
-    { id: 2, name: 'IronMan', genres: 'Action, Thriller'},
-    { id: 3, name: 'Avengers', genres: 'Action, Adventure'},
-    { id: 4, name: 'Ant Man', genres: 'Sci-fi'},
-    { id: 5, name: 'Intestaller', genres: 'Adventure, Sci-fi'},
-    { id: 5, name: 'God Zila', genres: 'Action'}
+    { id: 1, name: 'Jhon Wick', genres: 'Action', rating: 7.4},
+    { id: 2, name: 'IronMan', genres: 'Action, Thriller', rating: 8.1},
+    { id: 3, name: 'Avengers', genres: 'Action, Adventure', rating: 9.1},
+    { id: 4, name: 'Ant Man', genres: 'Sci-fi', rating: 7.5},
+    { id: 5, name: 'Intestaller', genres: 'Adventure, Sci-fi', rating: 8.5 },
+    { id: 5, name: 'God Zila', genres: 'Action', rating: 8.4}
 ]
 //Home Page 
 app.get("/", (req, res) => {
