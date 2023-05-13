@@ -65,7 +65,7 @@ app.put("/api/movies/:id", (req, res) => {
 app.post("/api/movies/:id", (req, res) => {
     const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
-    // // Update it 
+    // Add it 
     const movie = {
         id: movies.length + 1,
         name: req.body.name,
@@ -74,10 +74,19 @@ app.post("/api/movies/:id", (req, res) => {
         year: req.body.year
     }
     movies.push(movie);
+    // Return the added movie to user
+    res.send(movie);
+})
+// Delete Sigle Movie
+app.delete("/api/movies/:id", (req, res) => {
+    // If movie is found,
+    const index = movies.findIndex(movie => movie.id === parseFloat(req.params.id) )
+    const movie = movies.find(movie => movie.id === parseFloat(req.params.id) )
+    if (index === -1 ) return res.status(404).send("The required movie not found! Can't Delete it!")
+    movies.splice(index, 1)
     // Return the updated movie to user
     res.send(movie);
 })
-
 function validateMovie(movie){
     const schema = Joi.object({
         name: Joi.string().min(3).required(),
