@@ -53,7 +53,7 @@ router.put("/:id", (req, res) => {
 })
 
 // Add/POST single movie
-router.post("/:id", (req, res) => {
+router.post("/", (req, res) => {
     const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     // Add it 
