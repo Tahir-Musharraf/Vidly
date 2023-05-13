@@ -1,7 +1,8 @@
+const Joi = require('joi');
 const express = require('express');
 const app = express();
 
-// app.use(express.json());
+app.use(express.json());
 
 // Data in movies array is not accurate
 const movies = [
@@ -10,7 +11,7 @@ const movies = [
     { id: 3, name: 'Avengers', genres: 'Action, Adventure', rating: 9.1, year: 2017},
     { id: 4, name: 'Ant Man', genres: 'Sci-fi', rating: 7.5, year: 2019},
     { id: 5, name: 'Intestaller', genres: 'Adventure, Sci-fi', rating: 8.5 , year: 2021},
-    { id: 5, name: 'God Zila', genres: 'Action', rating: 8.4, year: 2023},
+    { id: 6, name: 'God Zila', genres: 'Action', rating: 8.4, year: 2023},
 ]
 //Home Page 
 app.get("/", (req, res) => {
@@ -41,6 +42,29 @@ app.get("/api/movies/year/:year", (req, res) => {
     if (!movie) return res.status(404).send("The required movie year not found!")
 
     res.send(movie)
+})
+
+// SET/Update single movie
+app.put("/api/movies/:id", (req, res) => {
+    // If movie is found,
+    const movie = movies.find(movie => movie.id === parseFloat(req.params.id) )
+    if (!movie) return res.status(404).send("The required movie not found! Can't update!")
+    // Validating
+    const schema = Joi.object({
+        name: Joi.string().min(3).required(),
+        genres: Joi.string().min(3).required(),
+        rating: Joi.number().min(1).max(10).required(),
+        year: Joi.number().min(1900).max(2100).required(),
+    });
+    const { error } = schema.validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    // // Update it 
+    movie.name = req.body.name;
+    movie.genres = req.body.genres
+    movie.rating = req.body.rating
+    movie.year = req.body.year
+    // Return the updated movie to user
+    res.send(movie);
 })
 
 
