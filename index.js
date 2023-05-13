@@ -26,7 +26,6 @@ app.get("/api/movies/", (req, res) => {
 app.get("/api/movies/:genre", (req, res) => {
     const movie = movies.filter(movie => movie.genres.includes(req.params.genre))
     if (!movie) return res.status(404).send("The required genre not found!")
-
     res.send(movie)
 })
 // GET single movie:rating
@@ -44,19 +43,14 @@ app.get("/api/movies/year/:year", (req, res) => {
     res.send(movie)
 })
 
+
 // SET/Update single movie
 app.put("/api/movies/:id", (req, res) => {
     // If movie is found,
     const movie = movies.find(movie => movie.id === parseFloat(req.params.id) )
     if (!movie) return res.status(404).send("The required movie not found! Can't update!")
-    // Validating
-    const schema = Joi.object({
-        name: Joi.string().min(3).required(),
-        genres: Joi.string().min(3).required(),
-        rating: Joi.number().min(1).max(10).required(),
-        year: Joi.number().min(1900).max(2100).required(),
-    });
-    const { error } = schema.validate(req.body);
+    // Validating 
+    const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     // // Update it 
     movie.name = req.body.name;
@@ -67,6 +61,15 @@ app.put("/api/movies/:id", (req, res) => {
     res.send(movie);
 })
 
+function validateMovie(movie){
+    const schema = Joi.object({
+        name: Joi.string().min(3).required(),
+        genres: Joi.string().min(3).required(),
+        rating: Joi.number().min(1).max(10).required(),
+        year: Joi.number().min(1900).max(2100).required(),
+    });
+    return schema.validate(movie);
+}
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log("Lisiting on " + port + "..."))
