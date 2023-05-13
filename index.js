@@ -61,6 +61,23 @@ app.put("/api/movies/:id", (req, res) => {
     res.send(movie);
 })
 
+// Add/POST single movie
+app.post("/api/movies/:id", (req, res) => {
+    const { error } = validateMovie(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+    // // Update it 
+    const movie = {
+        id: movies.length + 1,
+        name: req.body.name,
+        genres: req.body.genres,
+        rating: req.body.rating,
+        year: req.body.year
+    }
+    movies.push(movie);
+    // Return the updated movie to user
+    res.send(movie);
+})
+
 function validateMovie(movie){
     const schema = Joi.object({
         name: Joi.string().min(3).required(),
