@@ -1,7 +1,17 @@
-const express = require('express')
+const express = require('express');
 const Joi = require('joi');
 const router = express.Router();
-// Data in movies array is not accurate
+const mongoose = require('mongoose');
+
+// Define the movie schema
+const movieSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    genres: String,
+    rating: Number,
+    year: Number
+});
+
 const movies = [
     { id: 1, name: 'Jhon Wick', genres: 'Action', rating: 7.4, year: 2012},
     { id: 2, name: 'IronMan', genres: 'Action, Thriller', rating: 8.1, year: 2015},
