@@ -12,16 +12,12 @@ const movieSchema = new mongoose.Schema({
     year: Number
 });
 
-const movies = [
-    { id: 1, name: 'Jhon Wick', genres: 'Action', rating: 7.4, year: 2012},
-    { id: 2, name: 'IronMan', genres: 'Action, Thriller', rating: 8.1, year: 2015},
-    { id: 3, name: 'Avengers', genres: 'Action, Adventure', rating: 9.1, year: 2017},
-    { id: 4, name: 'Ant Man', genres: 'Sci-fi', rating: 7.5, year: 2019},
-    { id: 5, name: 'Intestaller', genres: 'Adventure, Sci-fi', rating: 8.5 , year: 2021},
-    { id: 6, name: 'God Zila', genres: 'Action', rating: 8.4, year: 2023},
-]
-router.get("/", (req, res) => {
-    res.send(movies)
+// Create the Movie model
+const Movie = mongoose.model('movies_list', movieSchema);
+
+router.get("/", async (req, res) => { 
+    const MoviesList = await Movie.find().sort('name');
+    res.send(MoviesList)
 })
 // GET single movie:Genre
 router.get("/:genre", (req, res) => {
