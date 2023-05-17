@@ -59,18 +59,17 @@ router.put("/:id", (req, res) => {
 })
 
 // Add/POST single movie
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     const { error } = validateMovie(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     // Add it 
-    const movie = {
-        id: movies.length + 1,
+    let movie = new Movie({ 
         name: req.body.name,
         genres: req.body.genres,
         rating: req.body.rating,
         year: req.body.year
-    }
-    movies.push(movie);
+    })
+    movie = await movie.save();
     // Return the added movie to user
     res.send(movie);
 })
