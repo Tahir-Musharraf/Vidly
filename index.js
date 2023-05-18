@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const auth = require('./routes/auth')
 const users = require('./routes/users')
 const movies = require('./routes/movies')
 const home = require('./routes/home')
@@ -15,9 +16,7 @@ mongoose.connect('mongodb://localhost/movies')
 app.use('/', home)
 app.use('/api/movies/', movies)
 app.use('/api/users/', users)
-
-// GET all movies
-
+app.use('/api/auth/', auth)
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log("Lisiting on " + port + "..."))
