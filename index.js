@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const users = require('./routes/users')
 const movies = require('./routes/movies')
 const home = require('./routes/home')
 const express = require('express');
@@ -13,6 +14,7 @@ mongoose.connect('mongodb://localhost/movies')
 
 app.use('/', home)
 app.use('/api/movies/', movies)
+app.use('/api/users/', users)
 
 // GET all movies
 
