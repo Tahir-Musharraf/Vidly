@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const _ = require("lodash"); 
@@ -19,7 +20,8 @@ router.post("/", async (req, res) => {
     let validPassword = await bcrypt.compare(req.body.password, user.password)
     if (!validPassword) return res.status(400).send("Invaild username or password!")
 
-    res.send(true);
+    const token = jwt.sign({ _id: user._id }, 'private_key')
+    res.send(token);
 })
 function Validate(obj){
     const schema = Joi.object({
