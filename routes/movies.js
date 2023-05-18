@@ -20,21 +20,24 @@ router.get("/", async (req, res) => {
     res.send(MoviesList)
 })
 // GET single movie:Genre
-router.get("/:genre", (req, res) => {
-    const movie = movies.filter(movie => movie.genres.includes(req.params.genre))
+router.get("/:genre", async (req, res) => {
+    const MoviesList = await Movie.find().sort('name');
+    const movie = MoviesList.filter(movie => movie.genres.includes(req.params.genre))
     if (!movie) return res.status(404).send("The required genre not found!")
     res.send(movie)
 })
 // GET single movie:rating
-router.get("/rating/:rating", (req, res) => {
-    const movie = movies.find(movie => movie.rating === parseFloat(req.params.rating) )
+router.get("/rating/:rating", async (req, res) => {
+    const MoviesList = await Movie.find().sort('name');
+    const movie = MoviesList.find(movie => movie.rating === parseFloat(req.params.rating) )
     if (!movie) return res.status(404).send("The required ratting movie not found!")
 
     res.send(movie)
 })
 // GET single movie:year
-router.get("/year/:year", (req, res) => {
-    const movie = movies.find(movie => movie.year === parseFloat(req.params.year) )
+router.get("/year/:year", async (req, res) => {
+    const MoviesList = await Movie.find().sort('name');
+    const movie = MoviesList.find(movie => movie.year === parseFloat(req.params.year) )
     if (!movie) return res.status(404).send("The required movie year not found!")
 
     res.send(movie)
@@ -42,9 +45,10 @@ router.get("/year/:year", (req, res) => {
 
 
 // SET/Update single movie
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
     // If movie is found,
-    const movie = movies.find(movie => movie.id === parseFloat(req.params.id) )
+    const movie = await Movie.findById(req.params.id).exec()
+    console.log(movie)
     if (!movie) return res.status(404).send("The required movie not found! Can't update!")
     // Validating 
     const { error } = validateMovie(req.body);
@@ -54,6 +58,8 @@ router.put("/:id", (req, res) => {
     movie.genres = req.body.genres
     movie.rating = req.body.rating
     movie.year = req.body.year
+
+    movie.save();
     // Return the updated movie to user
     res.send(movie);
 })
