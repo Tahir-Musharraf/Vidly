@@ -2,15 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const router = express.Router();
 const mongoose = require('mongoose');
-
-// Define the movie schema
-const movieSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    genres: String,
-    rating: Number,
-    year: Number
-});
+const { movieSchema, validate } = require('../models/movie')
 
 // Create the Movie model
 const Movie = mongoose.model('movies_list', movieSchema);
@@ -51,7 +43,7 @@ router.put("/:id", async (req, res) => {
     console.log(movie)
     if (!movie) return res.status(404).send("The required movie not found! Can't update!")
     // Validating 
-    const { error } = validateMovie(req.body);
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     // // Update it 
     movie.name = req.body.name;
@@ -66,7 +58,7 @@ router.put("/:id", async (req, res) => {
 
 // Add/POST single movie
 router.post("/", async (req, res) => {
-    const { error } = validateMovie(req.body);
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     // Add it 
     let movie = new Movie({ 
@@ -80,23 +72,16 @@ router.post("/", async (req, res) => {
     res.send(movie);
 })
 // Delete Sigle Movie
-router.delete("/:id", (req, res) => {
-    // If movie is found,
-    const index = movies.findIndex(movie => movie.id === parseFloat(req.params.id) )
-    const movie = movies.find(movie => movie.id === parseFloat(req.params.id) )
-    if (index === -1 ) return res.status(404).send("The required movie not found! Can't Delete it!")
-    movies.splice(index, 1)
-    // Return the updated movie to user
+router.delete("/:id", async (req, res) => {
+    // If movie is found
+    const movie = await Movie.findByIdAndRemove(req.params.id).exec();
+    console.log(movie)
+    if (!movie) return res.status(404).send("The required movie was not found! Can't delete it!");
+    
+    // Return the deleted movie to the user
     res.send(movie);
-})
-function validateMovie(movie){
-    const schema = Joi.object({
-        name: Joi.string().min(3).required(),
-        genres: Joi.string().min(3).required(),
-        rating: Joi.number().min(1).max(10).required(),
-        year: Joi.number().min(1900).max(2100).required(),
-    });
-    return schema.validate(movie);
-}
+});
+
+
 
 module.exports = router
