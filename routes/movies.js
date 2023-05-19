@@ -1,3 +1,4 @@
+const admin = require('../middleware/admin')
 const auth = require('../middleware/auth')
 const express = require('express');
 const Joi = require('joi');
@@ -73,10 +74,9 @@ router.post("/", auth, async (req, res) => {
     res.send(movie);
 })
 // Delete Sigle Movie
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", [auth, admin], async (req, res) => {
     // If movie is found
-    const movie = await Movie.findByIdAndRemove(req.params.id).exec();
-    console.log(movie)
+    const movie = await Movie.findByIdAndRemove(req.params.id)
     if (!movie) return res.status(404).send("The required movie was not found! Can't delete it!");
     
     // Return the deleted movie to the user
