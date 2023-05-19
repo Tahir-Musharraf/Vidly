@@ -58,7 +58,7 @@ router.put("/:id", auth, async (req, res) => {
 })
 
 // Add/POST single movie
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     // Add it 
@@ -73,7 +73,7 @@ router.post("/", async (req, res) => {
     res.send(movie);
 })
 // Delete Sigle Movie
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
     // If movie is found
     const movie = await Movie.findByIdAndRemove(req.params.id).exec();
     console.log(movie)
