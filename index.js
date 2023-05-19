@@ -1,4 +1,5 @@
 const winston = require('winston')
+require('winston-mongodb')
 // require('express-async-errors')
 const error = require('./middleware/error')
 const config = require('config')
@@ -11,6 +12,14 @@ const express = require('express');
 const app = express();
 
 winston.add(new winston.transports.File({ filename: 'logger.log' }));
+winston.add(new winston.transports.MongoDB({
+    level: 'info', // Log level
+    db: 'mongodb://localhost:27017/movies', // MongoDB connection URI
+    options: {
+        useUnifiedTopology: true, // MongoDB driver options
+    },
+    collection: 'logs', // Collection name to store logs
+}));
 if (config.get('jwtPrivateKey')){
     console.error("FATAL ERROR: jwtPrivateKey is not Defined!")
     process.exit(1); 

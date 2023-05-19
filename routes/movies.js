@@ -11,6 +11,7 @@ const { movieSchema, validate } = require('../models/movie')
 const Movie = mongoose.model('movies_list', movieSchema);
 
 router.get("/", asyncMiddleware(async (req, res) => { 
+    throw new Error('Could not get the data!')
     const MoviesList = await Movie.find().sort('name');
     res.send(MoviesList)
 }));
