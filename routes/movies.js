@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth')
 const express = require('express');
 const Joi = require('joi');
 const router = express.Router();
@@ -37,7 +38,7 @@ router.get("/year/:year", async (req, res) => {
 
 
 // SET/Update single movie
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
     // If movie is found,
     const movie = await Movie.findById(req.params.id).exec()
     console.log(movie)
