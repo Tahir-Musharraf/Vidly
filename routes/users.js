@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+const config = require('config')
 const bcrypt = require('bcrypt')
 const _ = require("lodash"); 
 const { User, Validate } = require('../models/users')
@@ -20,7 +22,8 @@ router.post("/", async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt)
     await user.save();
     // Return the added movie to user
-    res.send(_.pick(user, [ '_id', 'name', 'email']));
+    const token = user.generateAuthToken();
+    res.header('x-auth-token', token).send(_.pick(user, [ '_id', 'name', 'email']));
 })
 
 module.exports = router
