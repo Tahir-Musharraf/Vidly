@@ -1,3 +1,4 @@
+const asyncMiddleware = require('../middleware/async')
 const admin = require('../middleware/admin')
 const auth = require('../middleware/auth')
 const express = require('express');
@@ -9,10 +10,10 @@ const { movieSchema, validate } = require('../models/movie')
 // Create the Movie model
 const Movie = mongoose.model('movies_list', movieSchema);
 
-router.get("/", async (req, res) => { 
+router.get("/", asyncMiddleware(async (req, res) => { 
     const MoviesList = await Movie.find().sort('name');
     res.send(MoviesList)
-})
+}));
 // GET single movie:Genre
 router.get("/:genre", async (req, res) => {
     const MoviesList = await Movie.find().sort('name');
