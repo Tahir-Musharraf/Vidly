@@ -7,3 +7,8 @@ error: unhandledRejection: something wrong {"stack":"Error: something wrong\n   
 info: Connected to db
 info: Connected to db
 {"level":"info","message":"Connected to db"}
+{"level":"info","message":"Connected to db"}
+{"level":"info","message":"Connected to db"}
+{"level":"info","message":"Connected to db"}
+{"level":"info","message":"Connected to db"}
+{"level":"info","message":"Connected to db"}
