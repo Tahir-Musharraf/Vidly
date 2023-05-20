@@ -16,13 +16,11 @@ module.exports = function(){
     }));
 
     process.on('uncaughtException', (err) => {
-        console.error('Uncaught Exception:', err);
         winston.error('Uncaught Exception:', err);
         process.exit(1); // Terminate the process
     });
 
     process.on('unhandledRejection', (err) => {
-        console.error('unhandledRejection:', err);
         winston.error('unhandledRejection:', err);
         process.exit(1); // Terminate the process
     });
