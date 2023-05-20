@@ -9,12 +9,19 @@ const users = require('./routes/users')
 const movies = require('./routes/movies')
 const home = require('./routes/home')
 const express = require('express');
+const { reject } = require('lodash')
 const app = express();
 
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
     winston.error('Uncaught Exception:', err);
-    // process.exit(1); // Terminate the process
+    process.exit(1); // Terminate the process
+});
+
+process.on('unhandledRejection', (err) => {
+    console.error('unhandledRejection:', err);
+    winston.error('unhandledRejection:', err);
+    process.exit(1); // Terminate the process
 });
   
 winston.add(new winston.transports.File({ filename: 'logger.log', format: winston.format.simple() }));
@@ -27,7 +34,8 @@ winston.add(new winston.transports.MongoDB({
     collection: 'logs', // Collection name to store logs
 }));
 
-throw new Error('something wrong')
+
+let p = Promise.reject(new Error('something wrong'))
 
 if (config.get('jwtPrivateKey')){
     console.error("FATAL ERROR: jwtPrivateKey is not Defined!")
