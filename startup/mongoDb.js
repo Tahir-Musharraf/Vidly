@@ -6,8 +6,7 @@ module.exports = function(){
     mongoose
     .connect('mongodb://localhost/movies')
     .then(() => {
-        console.log('Connected to db');
-        // winston.info('Connected to db: Success');
+        winston.info('Connected to db: Success');
     })
 
 }
