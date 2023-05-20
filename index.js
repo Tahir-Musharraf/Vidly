@@ -11,7 +11,13 @@ const home = require('./routes/home')
 const express = require('express');
 const app = express();
 
-winston.add(new winston.transports.File({ filename: 'logger.log' }));
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+    winston.error('Uncaught Exception:', err);
+    // process.exit(1); // Terminate the process
+});
+  
+winston.add(new winston.transports.File({ filename: 'logger.log', format: winston.format.simple() }));
 winston.add(new winston.transports.MongoDB({
     level: 'info', // Log level
     db: 'mongodb://localhost:27017/movies', // MongoDB connection URI
@@ -20,6 +26,9 @@ winston.add(new winston.transports.MongoDB({
     },
     collection: 'logs', // Collection name to store logs
 }));
+
+throw new Error('something wrong')
+
 if (config.get('jwtPrivateKey')){
     console.error("FATAL ERROR: jwtPrivateKey is not Defined!")
     process.exit(1); 
