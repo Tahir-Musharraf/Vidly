@@ -7,7 +7,7 @@ const express = require('express');
 const { reject } = require('lodash')
 const app = express();
 require('./startup/routers')(app)
-require('./startup/mongoDb')
+require('./startup/mongoDb')()
 
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
@@ -21,7 +21,7 @@ process.on('unhandledRejection', (err) => {
     process.exit(1); // Terminate the process
 });
   
-winston.add(new winston.transports.File({ filename: 'logger.log', format: winston.format.simple() }));
+winston.add(new winston.transports.File({ filename: 'logger.log' }));
 winston.add(new winston.transports.MongoDB({
     level: 'info', // Log level
     db: 'mongodb://localhost:27017/movies', // MongoDB connection URI
