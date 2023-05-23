@@ -5,7 +5,7 @@ require('winston-mongodb')
 module.exports = function(){
     // Configure Winston transports
     winston.add(new winston.transports.Console()); // Add Console transport for logging to the console
-    winston.add(new winston.transports.File({ filename: 'logger.log' })); // Add File transport for logging to a file
+    // winston.add(new winston.transports.File({ filename: 'logger.log' })); // Add File transport for logging to a file
     winston.add(new winston.transports.MongoDB({
     level: 'info',
     db: 'mongodb://localhost:27017/movies',
